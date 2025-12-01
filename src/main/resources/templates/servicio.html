@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Solicitar Servicio - RF8</title>
+</head>
+<body>
+<h1>Solicitar Servicio</h1>
+<form action="/servicio" method="post">
+    Cliente ID: <input type="number" name="clienteId" required><br>
+    Conductor ID: <input type="number" name="conductorId" required><br>
+    Vehículo ID: <input type="number" name="vehiculoId" required><br>
+    Origen ID: <input type="number" name="origenId" required><br>
+    Destino ID: <input type="number" name="destinoId" required><br>
+    Tipo Servicio: <input type="text" name="tipoServicio" value="PASAJEROS"><br>
+    Nivel Transporte: <input type="text" name="nivelTransporte" value="ESTANDAR"><br>
+    <button type="submit">Solicitar</button>
+</form>
+
+<p th:text="${exito}"></p>
+<p th:text="${error}"></p>
+
+<a href="/">Volver</a>
+</body>
+</html>

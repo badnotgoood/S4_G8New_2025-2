@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>RFC1 - Escenario de concurrencia</title>
+    <meta http-equiv="refresh" content="30">
+</head>
+<body>
+<h1>RFC1 - Histórico del usuario</h1>
+<p>Esta página se actualiza cada 30 segundos para simular los niveles de aislamiento.</p>
+
+<table border="1">
+    <tr><th>ID Servicio</th><th>Tipo</th><th>Nivel</th><th>Inicio</th><th>Fin</th><th>Costo</th></tr>
+    <tr th:each="s : ${historico}">
+        <td th:text="${s.id}"></td>
+        <td th:text="${s.tipoServicio}"></td>
+        <td th:text="${s.nivelTransporte}"></td>
+        <td th:text="${s.horaInicio}"></td>
+        <td th:text="${s.horaFin}"></td>
+        <td th:text="${s.costoTotal}"></td>
+    </tr>
+</table>
+
+<a href="/servicio">Solicitar nuevo servicio (RF8)</a>
+<a href="/">Volver</a>
+</body>
+</html>

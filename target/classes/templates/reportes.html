@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reportes ALPESCAB</title>
+</head>
+<body>
+<h1>Consultas Avanzadas</h1>
+<form action="/rfc1" method="get">
+    <h3>RFC1 - Histórico por usuario</h3>
+    ID Usuario: <input type="number" name="usuarioId">
+    <button type="submit">Consultar</button>
+</form>
+
+<form action="/rfc2" method="get">
+    <h3>RFC2 - Top 20 conductores</h3>
+    <button type="submit">Ver Top</button>
+</form>
+
+<form action="/rfc3" method="get">
+    <h3>RFC3 - Ganancias por vehículo</h3>
+    ID Conductor: <input type="number" name="conductorId">
+    <button type="submit">Consultar</button>
+</form>
+
+<form action="/rfc4" method="get">
+    <h3>RFC4 - Uso de servicios por ciudad</h3>
+    Ciudad: <input type="text" name="ciudad" value="Bogotá"><br>
+    Fecha inicio: <input type="text" name="inicio" value="2025-08-01"><br>
+    Fecha fin: <input type="text" name="fin" value="2025-08-31"><br>
+    <button type="submit">Consultar</button>
+</form>
+
+<a href="/">Volver</a>
+</body>
+</html>
