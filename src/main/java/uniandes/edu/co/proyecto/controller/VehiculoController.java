@@ -137,42 +137,47 @@ public class VehiculoController {
 
     // RF5 -- MODIFICAR LA DISPONIBILIDAD DE UN VEHÍCULO PARA SERVICIOS
     @PostMapping("/{placa}/disponibilidades/edit/save")
-    public ResponseEntity<String> actualizarDisponibilidadVehiculo(@PathVariable("placa") String placa,
-                                                                   @RequestBody Disponibilidad disponibilidadActualizada) {
+    public ResponseEntity<String> actualizarDisponibilidadVehiculo(
+            @PathVariable("placa") String placa,
+            @RequestBody Disponibilidad disponibilidadActualizada) {
         try {
             Vehiculo vehiculo = vehiculoRepository.findVehiculoByPlaca(placa);
             if (vehiculo == null) {
                 return new ResponseEntity<>("No existe vehiculo con esa placa", HttpStatus.NOT_FOUND);
             }
-        
+
+            if (disponibilidadActualizada == null
+                    || disponibilidadActualizada.getDia() == null
+                    || disponibilidadActualizada.getHoraInicio() == null || disponibilidadActualizada.getHoraInicio().isEmpty()
+                    || disponibilidadActualizada.getHoraFin() == null || disponibilidadActualizada.getHoraFin().isEmpty()
+                    || disponibilidadActualizada.getTipoServicio() == null) {
+
+                return new ResponseEntity<>("Faltan campos obligatorios de la disponibilidad",
+                        HttpStatus.BAD_REQUEST);
+            }
+
             List<Disponibilidad> actuales = vehiculo.getDisponibilidades();
             if (actuales == null) {
                 actuales = new java.util.ArrayList<>();
             }
-        
-            java.util.List<Disponibilidad> nuevas = new java.util.ArrayList<>();
-            for (Disponibilidad d : actuales) {
-                boolean mismoDia = d.getDia() == disponibilidadActualizada.getDia();
-                boolean mismoTipo = d.getTipoServicio() == disponibilidadActualizada.getTipoServicio();
-                if (!(mismoDia && mismoTipo)) {
-                    nuevas.add(d);
-                }
+
+            java.util.List<Disponibilidad> prueba = new java.util.ArrayList<>(actuales);
+            prueba.add(disponibilidadActualizada);
+
+            if (seSuperponen(prueba)) {
+                return new ResponseEntity<>("La disponibilidad modificada se superpone con otra existente",
+                        HttpStatus.BAD_REQUEST);
             }
-        
-            nuevas.add(disponibilidadActualizada);
-        
-            if (seSuperponen(nuevas)) {
-                return new ResponseEntity<>("La disponibilidad modificada se superpone con otra existente", HttpStatus.BAD_REQUEST);
-            }
-        
-            vehiculo.setDisponibilidades(nuevas);
+
+            vehiculo.setDisponibilidades(prueba);
             vehiculoRepository.save(vehiculo);
-        
+
             return new ResponseEntity<>("Disponibilidad modificada correctamente", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error al modificar la disponibilidad: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error al modificar la disponibilidad: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+}
 
     private boolean seSuperponen(List<Disponibilidad> disponibilidades) {
         for (int i = 0; i < disponibilidades.size(); i++) {
